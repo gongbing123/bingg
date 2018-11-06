@@ -1,3 +1,7 @@
 git is a distributed control system
 git is free software
-creating a new branch is quick &simple
+<<<<<<< HEAD
+creating a new branch is quick and simple
+=======
+creating a new branch is quick and simple
+>>>>>>> day1
