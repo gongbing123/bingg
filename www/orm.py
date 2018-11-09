@@ -130,7 +130,7 @@ class Model(dict,metaclass=ModelMetaclass):
                 setattr(self,key,value)
         return value
     @classmethod
-    async def findAll(cls,args=None,where=None,**kw):
+    async def findAll(cls,where=None,args=None,**kw):
         sql=[cls.__select__]
         if where:
             sql.append('where')
