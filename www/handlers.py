@@ -1,19 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
-__author__ = 'Michael Liao'
-
-' url handlers '
-
 import re, time, json, logging, hashlib, base64, asyncio
-
 import markdown2
-
 from aiohttp import web
-
 from coroweb import get, post
 from apis import Page, APIValueError, APIResourceNotFoundError
-
 from Models import User, Comment, Blog, next_id
 from config import configs
 
@@ -35,10 +26,6 @@ def get_page_index(page_str):
     return p
 
 def user2cookie(user, max_age):
-    '''
-    Generate cookie str by user.
-    '''
-    # build cookie string by: id-expires-sha1
     expires = str(int(time.time() + max_age))
     s = '%s-%s-%s-%s' % (user.id, user.passwd, expires, _COOKIE_KEY)
     L = [user.id, expires, hashlib.sha1(s.encode('utf-8')).hexdigest()]
@@ -50,9 +37,6 @@ def text2html(text):
 
 
 async def cookie2user(cookie_str):
-    '''
-    Parse cookie and load user if cookie is valid.
-    '''
     if not cookie_str:
         return None
     try:
