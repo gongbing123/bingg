@@ -1,25 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'Michael Liao'
-
-'''
-async web application.
-'''
 
 import logging; logging.basicConfig(level=logging.INFO)
-
 import asyncio, os, json, time
 from datetime import datetime
-
 from aiohttp import web
 from jinja2 import Environment, FileSystemLoader
-
 from config import configs
-
 import orm
 from coroweb import add_routes, add_static
-
 from handlers import cookie2user, COOKIE_NAME
 
 def init_jinja2(app, **kw):
