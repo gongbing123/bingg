@@ -15,6 +15,7 @@ async def create_pool(loop,**kw):
         user=kw['user'],
         password=kw['password'],
         db=kw['db'],
+        charset=kw.get('charset','utf8'),
         autocommit=kw.get('autocommit',True),
         maxsize=kw.get('maxsize',10),
         minsize=kw.get('minsize',1),
@@ -50,7 +51,7 @@ def create_args_string(num):
     l=[]
     for i in range(num):
         l.append('?')
-    return ','.join(l)
+    return ', '.join(l)
 
 class Field(object):
     def __init__(self,name,column_type,primary_key,default):
@@ -129,7 +130,7 @@ class Model(dict,metaclass=ModelMetaclass):
                 setattr(self,key,value)
         return value
     @classmethod
-    async def findAll(cls,where=None,args=None,**kw):
+    async def findAll(cls,args=None,where=None,**kw):
         sql=[cls.__select__]
         if where:
             sql.append('where')
@@ -154,15 +155,15 @@ class Model(dict,metaclass=ModelMetaclass):
         rs=await select(' '.join(sql),args)
         return [cls(**r) for r in rs]
     @classmethod
-    async def findNum(cls,selectfield,where=None,args=None):
-        sql=['select %s from %s'%(selectfield,cls.__table__)]
+    async def findNumber(cls,selectfield,where=None,args=None):
+        sql=['select %s _num_ from `%s`'%(selectfield,cls.__table__)]
         if where:
             sql.append('where')
             sql.append(where)
         rs=await select(' '.join(sql),args,1)
         if len(rs)==0:
             return None
-        return rs[0]
+        return rs[0]['_num_']
     @classmethod
     async def find(cls,pk):
         rs=await select('%s where `%s`=?'%(cls.__select__,cls.__primary_key__),[pk],1)
